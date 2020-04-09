@@ -16,8 +16,41 @@ import { Routes, RouterModule, Router } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material-ui-module';
 import { AppModuleMenu } from './modules/menu/app.module';
+import {FirebaseUIModule} from 'firebaseui-angular';
+import * as firebase from 'firebase/app';
+import * as firebaseui from 'firebaseui';
+import {AngularFireAuthModule} from '@angular/fire/auth';
 
-
+const firebaseUiAuthConfig: firebaseui.auth.Config = {
+  signInFlow: 'popup',
+  signInOptions: [
+    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+    {
+      scopes: [
+        'public_profile',
+        'email',
+        'user_likes',
+        'user_friends'
+      ],
+      customParameters: {
+        'auth_type': 'reauthenticate'
+      },
+      provider: firebase.auth.FacebookAuthProvider.PROVIDER_ID
+    },
+    firebase.auth.TwitterAuthProvider.TWITTER_SIGN_IN_METHOD,
+    firebase.auth.GithubAuthProvider.GITHUB_SIGN_IN_METHOD,
+    {
+      requireDisplayName: true,
+      provider: firebase.auth.EmailAuthProvider.PROVIDER_ID
+    },
+    // firebase.auth.PhoneAuthProvider.PROVIDER_ID,
+    // firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
+  ],
+  tosUrl: '<your-tos-link>',
+  privacyPolicyUrl: '<your-privacyPolicyUrl-link>',
+  credentialHelper: firebaseui.auth.CredentialHelper.ACCOUNT_CHOOSER_COM
+};
+ 
 @NgModule({
   declarations: [
     AppComponent,
@@ -33,9 +66,11 @@ import { AppModuleMenu } from './modules/menu/app.module';
     BrowserAnimationsModule,
     MaterialModule,
     AppRoutingModule,
-    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireAuthModule,
     AngularFireDatabaseModule,
     AppModuleMenu,
+    FirebaseUIModule.forRoot(firebaseUiAuthConfig),
   ],
   providers: [],
   bootstrap: [ AppComponent ]

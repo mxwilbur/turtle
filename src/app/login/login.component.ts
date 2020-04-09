@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationStart} from '@angular/router';
+import { FirebaseuiAngularLibraryService } from 'firebaseui-angular';
 
 @Component({
   selector: 'app-login',
@@ -10,8 +11,9 @@ import { Router, NavigationStart} from '@angular/router';
 
 export class LoginComponent implements OnInit {
 
-  constructor() { }
-
+  constructor(private firebaseuiAngularLibraryService: FirebaseuiAngularLibraryService) {
+    firebaseuiAngularLibraryService.firebaseUiInstance.disableAutoSignIn();
+  }
   ngOnInit() {
   }
 }
